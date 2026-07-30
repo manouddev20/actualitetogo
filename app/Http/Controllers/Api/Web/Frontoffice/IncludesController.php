@@ -7,13 +7,12 @@ use App\Http\Controllers\Api\BaseController;
 use App\Models\Category;
 use App\Models\NewsLetter;
 use App\Models\Tag;
-use App\Models\Publication;
-use App\Models\SenderMessage;
-use App\Models\Message;
+use App\Models\Publication; 
 // Importation des classes nécessaires pour la requête et la validation
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
  
 // Définition du contrôleur IncludesController
 class IncludesController extends BaseController
@@ -41,22 +40,29 @@ class IncludesController extends BaseController
      */
     public function togoActualiteRequestData()
     {
-        // Récupération des publications correspondant aux catégories définies
-        $togoactualiteData = Publication::where("status", 1)
-            ->whereIn("category_id", [35, 1, 2, 27, 34])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $togoactualiteData = Cache::remember(
+            'togoactualite_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                ])->whereIn("category_id", [35, 1, 2, 27, 34])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+            }
+        );
 
         // Vérification si aucune donnée n'est trouvée
         if ($togoactualiteData->isEmpty()) {
@@ -79,24 +85,30 @@ class IncludesController extends BaseController
      */
     public function rubriquesRequestData()
     {
-        $rubriquesData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 28]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+       $rubriquesData = Cache::remember(
+            'rubriques_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 28]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+            }
+        );
 
         if ($rubriquesData->isEmpty()) {
             return $this->sendError('Aucune publication de rubriques trouvée', [], 404);
@@ -110,24 +122,31 @@ class IncludesController extends BaseController
      */
     public function diplomatieRequestData()
     {
-        $diplomatieData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 11]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $diplomatieData = Cache::remember(
+            'diplomatie_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 11]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+
+            }
+        );
 
         if ($diplomatieData->isEmpty()) {
             return $this->sendError('Aucune publication de diplomatie trouvée', [], 404);
@@ -141,24 +160,31 @@ class IncludesController extends BaseController
      */
     public function chroniquesRequestData()
     {
-        $chroniquesData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 5]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $chroniquesData = Cache::remember(
+            'chroniques_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 5]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+
+            }
+        );
 
         if ($chroniquesData->isEmpty()) {
             return $this->sendError('Aucune publication de chroniques trouvée', [], 404);
@@ -172,24 +198,30 @@ class IncludesController extends BaseController
      */
     public function economieRequestData()
     {
-        $economieData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 12]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $economieData = Cache::remember(
+            'economie_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 12]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+            }
+        );
 
         if ($economieData->isEmpty()) {
             return $this->sendError('Aucune publication de économie trouvée', [], 404);
@@ -203,24 +235,30 @@ class IncludesController extends BaseController
      */
     public function diasporaRequestData()
     {
-        $diasporaData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 10]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $diasporaData = Cache::remember(
+            'diaspora_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 10]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+            }
+        );
 
         if ($diasporaData->isEmpty()) {
             return $this->sendError('Aucune publication de diaspora trouvée', [], 404);
@@ -234,24 +272,31 @@ class IncludesController extends BaseController
      */
     public function fenetreSurLAfriqueRequestData()
     {
-        $fenetreSurLAfriqueData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 16]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $fenetreSurLAfriqueData = Cache::remember(
+            'fenetre_sur_l_afrique_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 16]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+
+            }
+        );
 
         if ($fenetreSurLAfriqueData->isEmpty()) {
             return $this->sendError('Aucune publication de fenêtre sur l\'afrique trouvée', [], 404);
@@ -265,24 +310,30 @@ class IncludesController extends BaseController
      */
     public function internationalRequestData()
     {
-        $internationalData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 20]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+       $internationalData = Cache::remember(
+            'international_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 20]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+            }
+        );
 
         if ($internationalData->isEmpty()) {
             return $this->sendError('Aucune publication de international trouvée', [], 404);
@@ -296,24 +347,31 @@ class IncludesController extends BaseController
      */
     public function mondeRequestData()
     {
-        $mondeData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 24]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $mondeData = Cache::remember(
+            'monde_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 24]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+            
+            }
+        );
 
         if ($mondeData->isEmpty()) {
             return $this->sendError('Aucune publication de monde trouvée', [], 404);
@@ -327,25 +385,32 @@ class IncludesController extends BaseController
      */
     public function afriqueRequestData()
     {
-        $afriqueData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 3]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $afriqueData = Cache::remember(
+            'afrique_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 3]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
 
+            }
+        );
+        
         if ($afriqueData->isEmpty()) {
             return $this->sendError('Aucune publication de afrique trouvée', [], 404);
         }
@@ -358,24 +423,31 @@ class IncludesController extends BaseController
      */
     public function sportsRequestData()
     {
-        $sportsData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 31]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $sportsData = Cache::remember(
+            'sports_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 31]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+
+            }
+        );
 
         if ($sportsData->isEmpty()) {
             return $this->sendError('Aucune publication de sports trouvée', [], 404);
@@ -389,24 +461,31 @@ class IncludesController extends BaseController
      */
     public function canRequestData()
     {
-        $canData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 4]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
+        $canData = Cache::remember(
+            'can_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 4]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
                 "author_slug",
                 "image_cover_url"
             ]);
+
+            }
+        );
 
         if ($canData->isEmpty()) {
             return $this->sendError('Aucune publication de can trouvée', [], 404);
@@ -420,24 +499,31 @@ class IncludesController extends BaseController
      */
     public function togoRequestData()
     {
-        $togoData = Publication::where([
-            ["status", 1],
-            ["type_publication_id", 1],
-            ["category_id", 34]
-        ])
-            ->latest('date_publish')
-            ->take(4)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "image_cover_url"
-            ]);
+        $togoData = Cache::remember(
+            'togo_publications_header',
+            now()->addMinutes(10), // Cache pendant 10 minutes
+            function () {
+                return Publication::where([
+                    ["status", 1],
+                    ["type_publication_id", 1],
+                    ["category_id", 34]
+                ])
+                ->latest('date_publish')
+                ->take(4)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "image_cover_url"
+                ]);
+
+            }
+        );
 
         if ($togoData->isEmpty()) {
             return $this->sendError('Aucune publication de togo trouvée', [], 404);
@@ -445,8 +531,8 @@ class IncludesController extends BaseController
 
         return $this->sendResponse($togoData, 'Publications de togo récupérées');
     }
-
-    /**
+/**
+     /**
      * Enregistrement d'un email pour la newsletter
      */
     public function newsletterStoreRequest(Request $request)
@@ -507,15 +593,21 @@ class IncludesController extends BaseController
             'Email enregistré avec succès.'
         );
     }
-
     /**
-     * Récupère les tags populaires
-     */
+    * Récupère les tags populaires
+    */
+    
     public function tagsRequestData()
     {
-        $tags = Tag::orderByDesc('count_publications')
-            ->take(20)
-            ->get();
+        $tags = Cache::remember(
+            'popular_tags_footer',
+            now()->addMinutes(10),
+            function () {
+                return Tag::orderByDesc('count_publications')
+                    ->take(10)
+                    ->get();
+            }
+        );
 
         if ($tags->isEmpty()) {
             return $this->sendError(
@@ -536,9 +628,15 @@ class IncludesController extends BaseController
      */
     public function categoryRequestData()
     {
-        $categories = Category::orderByDesc('count_publications')
-            ->take(8)
-            ->get();
+        $categories = Cache::remember(
+            'popular_categories_footer',
+            now()->addMinutes(10),
+            function () {
+                return Category::orderByDesc('count_publications')
+                    ->take(8)
+                    ->get();
+            }
+        );
 
         if ($categories->isEmpty()) {
             return $this->sendError(
@@ -554,31 +652,39 @@ class IncludesController extends BaseController
         );
     }
 
+        
     /**
      * Récupère les publications populaires récentes
      */
     public function publicationsRequestData()
     {
-        $publications = Publication::where([
-            ['status', 1],
-            ['type_publication_id', 1],
-        ])
-            ->whereDate('date_publish', '>', '2025-12-31') // Filtre sur les publications après cette date
-            ->orderByDesc('views_count') // Tri par nombre de vues décroissant
-            ->take(2)
-            ->get([
-                "id",
-                "content",
-                "truncate_content",
-                "title",
-                "slug",
-                "date_publish",
-                "author_name",
-                "author_slug",
-                "category_name",
-                "category_slug",
-                "image_cover_url"
-            ]);
+        $publications = Cache::remember(
+            'popular_publications_footer',
+            now()->addMinutes(10),
+            function () {
+                return Publication::where([
+                    ['status', 1],
+                    ['type_publication_id', 1],
+                ])
+                ->whereDate('date_publish', '>', '2025-12-31')
+                ->orderByDesc('views_count')
+                ->take(2)
+                ->get([
+                    "id",
+                    "content",
+                    "truncate_content",
+                    "title_truncate",
+                    "title",
+                    "slug",
+                    "date_publish",
+                    "author_name",
+                    "author_slug",
+                    "category_name",
+                    "category_slug",
+                    "image_cover_url"
+                ]);
+            }
+        );
 
         if ($publications->isEmpty()) {
             return $this->sendError(
