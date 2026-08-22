@@ -18282,7 +18282,10 @@ button.text-primary-hover:hover {
 }
 /*User CSS*/
 /*# sourceMappingURL=style.css.map */
-
+.img-header{
+    height: 150px; 
+    object-fit: cover"
+}
 .alaune_first_section_img_responsive {
     height: 522px;
     width: 100%;
@@ -18345,6 +18348,10 @@ button.text-primary-hover:hover {
         filter: brightness(70%);
     }
 
+    .img-header{
+        height: 180px; 
+        object-fit: cover"
+    }
     
     .one_slug_page_article_img_responsive{
         height: 380px;

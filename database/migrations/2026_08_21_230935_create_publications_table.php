@@ -38,7 +38,7 @@ return new class extends Migration
                 ->constrained('media_files')
                 ->nullOnDelete();
 
-            $table->string('title');
+            $table->string('title')->nullable();;
 
             $table->string('slug')
                 ->unique();
@@ -46,7 +46,7 @@ return new class extends Migration
             $table->string('title_truncate')
                 ->nullable();
 
-            $table->longText('content');
+            $table->longText('content')->nullable();;
 
             $table->text('truncate_content')
                 ->nullable();
@@ -79,7 +79,7 @@ return new class extends Migration
                 ->nullable();
 
             $table->timestamp('date_publish')->nullable();
-            
+
             $table->timestamp('date_modified')->nullable();
 
             $table->softDeletes();

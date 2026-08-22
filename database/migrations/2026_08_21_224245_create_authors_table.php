@@ -27,6 +27,7 @@ return new class extends Migration
 
             $table->string('last_name')
                 ->nullable();
+            
 
             $table->string('email')
                 ->unique();
@@ -40,7 +41,7 @@ return new class extends Migration
             $table->longText('description')
                 ->nullable();
 
-            $table->text('photo')
+            $table->string('name')
                 ->nullable();
 
             $table->boolean('status')

@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'phone',
     'slug',
     'description',
-    'photo',
+    'name',
     'status',
 ])]
 

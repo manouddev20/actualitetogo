@@ -40,8 +40,8 @@ est strictement interdite. Tout contrevenant s'expose à de graves poursuites.",
                 'last_name' => 'MIKANDO',
                 'phone' => '+33 6 27 38 75 14',
                 'email' => 'mikando@example.com',
-                'name' => 'Delomepub',
-                'slug' => Str::slug('Delomepub'),
+                'name' => 'dutogoactu',
+                'slug' => Str::slug('dutogoactu'),
                 'wp_author_id' => 10,
                 'description' => "Nous tenons à rappeler aux visiteurs du site que
 sans partenariat avec togoactualite.com, la reprise des articles même partielle
@@ -68,6 +68,7 @@ est strictement interdite. Tout contrevenant s'expose à de graves poursuites.",
                     'description' => $authorData['description'],
                     'phone' => $authorData['phone'] ?? null,
                     'email' => $authorData['email'] ?? null,
+                    'name' => $authorData['name'] ?? null,
                 ]
             );
 
