@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'user_id',
     'first_name',
     'last_name',
+    'email',
+    'phone',
     'slug',
     'description',
     'photo',

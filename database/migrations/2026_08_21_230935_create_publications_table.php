@@ -11,46 +11,79 @@ return new class extends Migration
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a créé la publication.
-             */
+            $table->unsignedBigInteger('wp_publication_id')
+                ->nullable()
+                ->unique();
+
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
-            /**
-             * Auteur de la publication.
-             */
             $table->foreignId('author_id')
+                ->nullable()
                 ->constrained('authors')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
-            /**
-             * Type de publication.
-             */
             $table->foreignId('type_publication_id')
+                ->nullable()
                 ->constrained('type_publications')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             /*
-             * Les autres informations seront ajoutées ensuite.
-             */
+     * Média de couverture.
+     */
+            $table->foreignId('cover_media_file_id')
+                ->nullable()
+                ->constrained('media_files')
+                ->nullOnDelete();
+
             $table->string('title');
-            $table->string('slug')->unique();
+
+            $table->string('slug')
+                ->unique();
+
+            $table->string('title_truncate')
+                ->nullable();
+
             $table->longText('content');
 
-            /*
-             * 0 = brouillon
-             * 1 = publié
-             * 2 = archivé
-             */
-            $table->tinyInteger('status')->default(0);
+            $table->text('truncate_content')
+                ->nullable();
 
-            $table->timestamp('published_at')->nullable();
+            $table->longText('truncate_content_max')
+                ->nullable();
 
-            $table->unsignedBigInteger('views_count')->default(0);
+            $table->boolean('status')
+                ->default(false);
+
+            $table->boolean('comment_status')
+                ->default(true);
+
+            $table->unsignedBigInteger('views_count')
+                ->default(0);
+
+            $table->unsignedBigInteger('likes_count')
+                ->default(0);
+
+            $table->unsignedBigInteger('shares_count')
+                ->default(0);
+
+            $table->unsignedBigInteger('comment_count')
+                ->default(0);
+
+            $table->string('source')
+                ->nullable();
+
+            $table->text('wp_link')
+                ->nullable();
+
+            $table->timestamp('date_publish')->nullable();
+            
+            $table->timestamp('date_modified')->nullable();
 
             $table->softDeletes();
+
             $table->timestamps();
         });
     }

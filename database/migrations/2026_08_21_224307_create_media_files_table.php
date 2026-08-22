@@ -11,44 +11,46 @@ return new class extends Migration
         Schema::create('media_files', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a ajouté le fichier.
-             */
+            /*
+     * Utilisateur ayant importé/ajouté le média.
+     */
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
-            /**
-             * Type du fichier.
-             */
+            /*
+     * Type du média.
+     */
             $table->foreignId('file_type_id')
+                ->nullable()
                 ->constrained('file_types')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
-            /**
-             * Nom généré du fichier.
-             */
-            $table->string('name');
+            /*
+     * Identifiant unique du média WordPress.
+     */
+            $table->unsignedBigInteger('wp_file_id')
+                ->nullable()
+                ->unique();
 
-            /**
-             * Chemin du fichier.
-             */
-            $table->string('path');
+            /*
+     * Informations du média.
+     */
+            $table->string('file_name');
 
-            /**
-             * Nom original du fichier envoyé.
-             */
-            $table->string('original_name')->nullable();
+            $table->string('file_slug');
 
-            /**
-             * Exemple : image/jpeg.
-             */
-            $table->string('mime_type')->nullable();
+            $table->text('file_url');
 
-            /**
-             * Taille du fichier en octets.
-             */
-            $table->unsignedBigInteger('size')->nullable();
+            /*
+     * URL originale provenant de WordPress.
+     */
+            $table->text('wp_file')
+                ->nullable();
+
+            $table->text('caption')
+                ->nullable();
 
             $table->softDeletes();
 

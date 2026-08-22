@@ -13,11 +13,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'user_id',
     'author_id',
     'type_publication_id',
+    'cover_media_file_id',
+    'wp_publication_id',
     'title',
     'slug',
+    'title_truncate',
     'content',
+    'truncate_content',
+    'truncate_content_max',
     'status',
-    'published_at',
+    'comment_status',
+    'date_publish',
+    'date_modified',
+    'source',
+    'wp_link',
 ])]
 
 class Publication extends Model
@@ -79,6 +88,18 @@ class Publication extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * Média utilisé comme couverture.
+     */
+    public function coverMediaFile(): BelongsTo
+    {
+        return $this->belongsTo(
+            MediaFile::class,
+            'cover_media_file_id'
+        );
+    }
+
     /**
      * Les fichiers de la publication.
      */

@@ -11,7 +11,7 @@ class Comment extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
+     protected $fillable = [
         'publication_id',
         'user_id',
         'parent_id',
@@ -19,7 +19,9 @@ class Comment extends Model
         'email',
         'content',
         'status',
+        'wp_comment_id',
     ];
+
 
     /**
      * Publication commentée.

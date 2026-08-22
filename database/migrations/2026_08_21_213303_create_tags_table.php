@@ -11,16 +11,22 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a créé le tag.
-             */
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
+
+            /*
+     * ID du tag WordPress.
+     */
+            $table->unsignedBigInteger('wp_tag_id')
+                ->nullable()
+                ->unique();
 
             $table->string('name');
 
-            $table->string('slug')->unique();
+            $table->string('slug')
+                ->unique();
 
             $table->softDeletes();
 

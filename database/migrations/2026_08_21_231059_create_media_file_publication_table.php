@@ -8,9 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('media_file_publication', function (Blueprint $table) {
-            $table->id();
-
+       Schema::create('media_file_publication', function (Blueprint $table) {
             $table->foreignId('publication_id')
                 ->constrained('publications')
                 ->cascadeOnDelete();

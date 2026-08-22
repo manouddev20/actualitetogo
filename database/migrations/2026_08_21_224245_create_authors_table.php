@@ -11,31 +11,40 @@ return new class extends Migration
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a ajouté cet auteur.
-             */
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
+
+            /*
+             * Identifiant de l'auteur sur WordPress.
+            */
+            $table->unsignedBigInteger('wp_author_id')
+                ->nullable()
+                ->unique();
 
             $table->string('first_name');
 
-            $table->string('last_name');
+            $table->string('last_name')
+                ->nullable();
 
-            $table->string('slug')->unique();
+            $table->string('email')
+                ->unique();
 
-            $table->longText('description')->nullable();
+            $table->string('phone')
+                ->nullable();
 
-            /**
-             * Photo de l'auteur.
-             */
-            $table->string('photo')->nullable();
+            $table->string('slug')
+                ->unique();
 
-            /**
-             * 0 = inactif
-             * 1 = actif
-             */
-            $table->boolean('status')->default(true);
+            $table->longText('description')
+                ->nullable();
+
+            $table->text('photo')
+                ->nullable();
+
+            $table->boolean('status')
+                ->default(true);
 
             $table->softDeletes();
 

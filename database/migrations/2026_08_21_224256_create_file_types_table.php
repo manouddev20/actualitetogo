@@ -11,26 +11,28 @@ return new class extends Migration
         Schema::create('file_types', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a créé le type de fichier.
-             */
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->string('name');
 
-            $table->string('slug')->unique();
+            /*
+     * Type WordPress utilisé pour l'import.
+     *
+     * Exemples :
+     * image
+     * video
+     * text
+     * application
+     * audio
+     */
+            $table->string('slug_wp')
+                ->unique();
 
-            /**
-             * Exemple : image/jpeg
-             */
-            $table->string('mime_type')->nullable();
-
-            /**
-             * Exemple : jpg, png, mp4, pdf
-             */
-            $table->string('extension')->nullable();
+            $table->string('slug')
+                ->unique();
 
             $table->softDeletes();
 

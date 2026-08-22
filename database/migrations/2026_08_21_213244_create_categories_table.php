@@ -11,16 +11,22 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a créé la catégorie.
-             */
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
+
+            /*
+     * ID de la catégorie WordPress.
+     */
+            $table->unsignedBigInteger('wp_category_id')
+                ->nullable()
+                ->unique();
 
             $table->string('name');
 
-            $table->string('slug')->unique();
+            $table->string('slug')
+                ->unique();
 
             $table->softDeletes();
 

@@ -2,25 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-#[Fillable([
-    'user_id',
-    'name',
-    'slug',
-    'mime_type',
-    'extension',
-])]
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FileType extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'name',
+        'slug_wp',
+        'slug',
+    ];
 
     /**
-     * Utilisateur qui a créé le type de fichier.
+     * Utilisateur ayant créé le type de fichier.
      */
     public function user(): BelongsTo
     {
@@ -28,10 +28,12 @@ class FileType extends Model
     }
 
     /**
-     * Les fichiers appartenant à ce type.
+     * Fichiers appartenant à ce type.
      */
-    public function mediaFiles()
+    public function mediaFiles(): HasMany
     {
-        return $this->hasMany(MediaFile::class);
+        return $this->hasMany(
+            MediaFile::class
+        );
     }
 }

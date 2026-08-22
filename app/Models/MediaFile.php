@@ -2,28 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
-#[Fillable([
-    'user_id',
-    'file_type_id',
-    'name',
-    'path',
-    'original_name',
-    'mime_type',
-    'size',
-])]
 
 class MediaFile extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'file_type_id',
+        'wp_file_id',
+        'file_name',
+        'file_slug',
+        'file_url',
+        'wp_file',
+        'caption',
+    ];
 
     /**
-     * Utilisateur qui a ajouté le fichier.
+     * L'utilisateur ayant ajouté/importé le fichier.
      */
     public function user(): BelongsTo
     {
@@ -39,14 +40,26 @@ class MediaFile extends Model
     }
 
     /**
-     * Publications associées au fichier.
-    */
-    
+     * Publications utilisant ce fichier.
+     */
     public function publications(): BelongsToMany
     {
         return $this->belongsToMany(
             Publication::class,
-            'media_file_publication'
+            'publication_media_file',
+            'media_file_id',
+            'publication_id'
+        );
+    }
+
+    /**
+     * Publications utilisant ce fichier comme couverture.
+     */
+    public function coverPublications()
+    {
+        return $this->hasMany(
+            Publication::class,
+            'cover_media_file_id'
         );
     }
 }

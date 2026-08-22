@@ -14,16 +14,15 @@ return new class extends Migration
         Schema::create('type_publications', function (Blueprint $table) {
             $table->id();
 
-            /**
-             * Utilisateur qui a créé ce type de publication.
-             */
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->string('name');
 
-            $table->string('slug')->unique();
+            $table->string('slug')
+                ->unique();
 
             $table->softDeletes();
 
